@@ -5,6 +5,8 @@ package org.linkworld.controller;
  *@Since   2022/3/5
  */
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.linkworld.check.sequence.PatternDTOSequence;
 import org.linkworld.persist.dto.PatternDTO;
 import org.linkworld.persist.emtity.Pattern;
@@ -16,12 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class UserOperationController extends BaseController{
@@ -43,6 +45,24 @@ public class UserOperationController extends BaseController{
         UserPattern userPattern = new UserPattern(new BigInteger(userIdStr), dto.getPatternName());
         userPatternService.save(userPattern);
         return ResultBean.ok();
+    }
+
+    @GetMapping("/getAllPattern")
+    @ResponseBody
+    public ResultBean getAllPattern() {
+        String userId = getUserId();
+        ArrayList<Pattern> patternList = new ArrayList<>();
+        LambdaQueryWrapper<UserPattern> wrapper = new QueryWrapper<UserPattern>().lambda().eq(UserPattern::getUserId, userId);
+        List<UserPattern> userPatternList = userPatternService.list(wrapper);
+        userPatternList.forEach(userPattern -> {
+            LambdaQueryWrapper<Pattern> patternWrapper = new QueryWrapper<Pattern>().lambda().eq(Pattern::getPatternName, userPattern.getPatternName());
+            Pattern pattern = patternService.getOne(patternWrapper);
+            Pattern realPattern = Optional.ofNullable(pattern).orElseThrow(() -> {
+                return new RuntimeException("没有这样的pattern");
+            });
+            patternList.add(realPattern);
+        });
+        return ResultBean.ok().setData(patternList);
     }
 
 
