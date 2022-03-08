@@ -19,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +63,4 @@ public class UserOperationController extends BaseController{
         });
         return ResultBean.ok().setData(patternList);
     }
-
-
 }

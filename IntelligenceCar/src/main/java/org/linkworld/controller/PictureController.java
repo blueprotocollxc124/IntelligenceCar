@@ -14,12 +14,12 @@ import org.springframework.boot.ansi.AnsiOutput;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,8 +30,8 @@ public class PictureController extends BaseController{
 
  @PostMapping("/savePicture")
  @ResponseBody
- public ResultBean savePictureToServer(String pictureAbsolutePath) {
-  Boolean isTrue = savePicture(pictureAbsolutePath);
+ public ResultBean savePictureToServer(@RequestParam("file") MultipartFile file) {
+  Boolean isTrue = savePicture(file);
   if(isTrue==true) {
    return ResultBean.ok();
   }
@@ -51,20 +51,18 @@ public class PictureController extends BaseController{
   return ResultBean.ok().setData(fileList);
  }
 
- private Boolean savePicture(String picturePath)  {
-
+ private Boolean savePicture(MultipartFile file)  {
   File pictureFile = null;
   File outPictureFile = null;
-  FileInputStream fileInputStream = null;
+  InputStream fileInputStream = null;
   FileOutputStream fileOutputStream = null;
 
   try {
    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd-HHmmss");
    String dateFormat = format.format(new Date());
    String dateFormatJPG = dateFormat.concat(".jpg");
-   pictureFile = new File(picturePath);
    outPictureFile = new File(FileProperties.OUT_FILE_PATH+dateFormatJPG);
-   fileInputStream = new FileInputStream(pictureFile);
+   fileInputStream = file.getInputStream();
    fileOutputStream = new FileOutputStream(outPictureFile);
    int len = 0;
    byte[] bytes = new byte[1024];
