@@ -16,7 +16,9 @@ public enum ResultBeanEnum {
 
  RESULT_OK(200,"成功",true),
 
- RESULT_FAILURE(500,"失败",false)
+ RESULT_FAILURE(500,"失败",false),
+
+ Not_Auth(500,"无权限",false);
 
  ;
  private Integer code;

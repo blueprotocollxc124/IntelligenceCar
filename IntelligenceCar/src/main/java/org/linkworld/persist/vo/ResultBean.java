@@ -24,7 +24,13 @@ public class ResultBean {
 
     private Boolean success;
 
+    private int userLogin;
+
+    private int wechatLogin;
+
     private Object data;
+
+
 
 
     public static ResultBean ok() {
@@ -42,6 +48,15 @@ public class ResultBean {
                 .setCode(ResultBeanEnum.RESULT_FAILURE.getCode())
                 .setMessage(ResultBeanEnum.RESULT_FAILURE.getMessage())
                 .setSuccess(ResultBeanEnum.RESULT_FAILURE.getSuccess());
+        return resultBean;
+    }
+
+    public static ResultBean notAuth() {
+        ResultBean resultBean = new ResultBean();
+        resultBean
+                .setCode(ResultBeanEnum.Not_Auth.getCode())
+                .setMessage(ResultBeanEnum.Not_Auth.getMessage())
+                .setSuccess(ResultBeanEnum.Not_Auth.getSuccess());
         return resultBean;
     }
 }

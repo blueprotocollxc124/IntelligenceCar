@@ -2,25 +2,18 @@
 # 端口
 server:
   port: 8080
+  servlet:
+    context-path: /
 
 # Druid数据源，数据库连接
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   datasource:
-    password: 123456
+    password: 20010307lL.
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/intelligence_car?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimeZone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/car_login?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     type: com.alibaba.druid.pool.DruidDataSource
-    #Spring Boot 默认是不注入这些属性值的，需要自己绑定
-    #druid 数据源专有配置
-    initialSize: 5
-    minIdle: 5
-    maxActive: 20
-    maxWait: 60000
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 1 FROM DUAL
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
-    poolPreparedStatements: true
+
