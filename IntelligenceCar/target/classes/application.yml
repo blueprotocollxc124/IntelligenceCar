@@ -1,0 +1,19 @@
+
+# 端口
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+# Druid数据源，数据库连接
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  datasource:
+    password: 20010307lL.
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/car_login?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    type: com.alibaba.druid.pool.DruidDataSource
+
