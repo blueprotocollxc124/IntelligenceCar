@@ -10,9 +10,9 @@ public class WechatConfig {
 
     String url="https://api.weixin.qq.com/sns/jscode2session";
 
-    String appId="wxeca0d11d9513a807";
+    String appId="wx2883cdadeafa7b63";
 
-    String appSecret="6c9905f7844d65881b3f453b4e6cfc73";
+    String appSecret="258083396fcc5ee9a11cc1adcb7275df";
 
     String grant_type="authorization_code";
 

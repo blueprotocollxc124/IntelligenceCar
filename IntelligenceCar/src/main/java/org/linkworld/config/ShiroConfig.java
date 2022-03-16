@@ -79,7 +79,10 @@ public class ShiroConfig {
         Map<String, String> map = new HashMap<>();
         map.put("/**", "filter");
         // 访问 /login/** 不通过JWTFilter
+        map.put("/doc.html","anon");
         map.put("/login/**", "anon");
+        map.put("/picture/**","anon");
+        map.put("/pattern/**","anon");
         map.put("/swagger-ui.html","anon");
         map.put("/css/**","anon");
         map.put("/fonts/**","anon");

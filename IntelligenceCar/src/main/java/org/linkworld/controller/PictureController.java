@@ -12,10 +12,7 @@ import org.linkworld.properties.FileProperties;
 import org.springframework.boot.ansi.AnsiColor;
 import org.springframework.boot.ansi.AnsiOutput;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
@@ -26,6 +23,7 @@ import java.util.Date;
 
 @Controller
 @Slf4j
+@RequestMapping("/picture")
 public class PictureController extends BaseController{
 
  @PostMapping("/savePicture")
@@ -42,7 +40,7 @@ public class PictureController extends BaseController{
  @GetMapping("/getAllPictures")
  @ResponseBody
  public ResultBean getAllPicture() {
-  File pictureFiles = new File(FileProperties.OUT_FILE_PATH);
+  File pictureFiles = new File(FileProperties.LINUX_OUT_FILE_PATH);
   File[] files = pictureFiles.listFiles();
   ArrayList<File> fileList = new ArrayList<>();
   for (File file : files) {
@@ -61,7 +59,7 @@ public class PictureController extends BaseController{
    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd-HHmmss");
    String dateFormat = format.format(new Date());
    String dateFormatJPG = dateFormat.concat(".jpg");
-   outPictureFile = new File(FileProperties.OUT_FILE_PATH+dateFormatJPG);
+   outPictureFile = new File(FileProperties.LINUX_OUT_FILE_PATH+dateFormatJPG);
    fileInputStream = file.getInputStream();
    fileOutputStream = new FileOutputStream(outPictureFile);
    int len = 0;

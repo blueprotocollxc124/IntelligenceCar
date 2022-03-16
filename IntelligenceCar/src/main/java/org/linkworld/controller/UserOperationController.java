@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/pattern")
 public class UserOperationController extends BaseController{
 
     @Autowired
