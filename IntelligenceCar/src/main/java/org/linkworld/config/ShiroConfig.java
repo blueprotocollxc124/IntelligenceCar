@@ -83,7 +83,7 @@ public class ShiroConfig {
         map.put("/login/**", "anon");
         map.put("/picture/**","anon");
         map.put("/pattern/**","anon");
-        map.put("/swagger-ui.html","anon");
+        map.put("/swagger-ui.html#/","anon");
         map.put("/css/**","anon");
         map.put("/fonts/**","anon");
         map.put("/img/**","anon");
@@ -93,7 +93,7 @@ public class ShiroConfig {
         map.put("/webjars/**", "anon");
         map.put("/v2/**", "anon");
         map.put("/swagger-resources/**", "anon");
-        map.put("/addUser", "anon");
+
 
        shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
         return shiroFilterFactoryBean;

@@ -21,16 +21,46 @@ import javax.websocket.Session;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class MyAuthFilter extends AuthorizationFilter {
     @Autowired
     UserMapper userMapper;
     @Autowired
     ObjectMapper objectMapper;
+
+    static List<String> list=new ArrayList<>();
+
+    static {
+        list.add("/doc.html");
+        list.add("/login/**");
+        list.add("/picture/**");
+        list.add("/pattern/**");
+        list.add("/swagger-ui.html#/");
+        list.add("/css/**");
+        list.add("/fonts/**");
+        list.add("/img/**");
+        list.add("/js/**");
+        list.add("/v2/api-docs");
+        list.add("/swagger-ui.html");
+        list.add("/webjars/**");
+        list.add("/v2/**");
+        list.add("/swagger-resources/**");
+    }
     @Override
     protected boolean isAccessAllowed(ServletRequest servletRequest, ServletResponse servletResponse, Object o) throws Exception {
 
+
         HttpServletRequest request=(HttpServletRequest) servletRequest;
+
+        String url=request.getRequestURL().toString();
+
+        if(list.stream().anyMatch(usl1->url.matches(url))){
+            return true;
+        }
+
 
         HttpSession session= request.getSession();
 
