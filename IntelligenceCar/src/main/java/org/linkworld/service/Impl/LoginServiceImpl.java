@@ -46,11 +46,13 @@ public class LoginServiceImpl implements LoginService {
             if(user==null){
                 //无微信与用户绑定的情况下
                 userMapper.saveWechatUser(openId,userId);
+                session.setAttribute(LoginSessionParams.userLogin,userId);
                 return ;
             }else {
                 //有绑定情况
                 if(!user.getId().equals(userId)){//绑定情况不一致
                     userMapper.Update(openId,userId);
+                    session.setAttribute(LoginSessionParams.userLogin,userId);
                     return ;
                 }
             }
