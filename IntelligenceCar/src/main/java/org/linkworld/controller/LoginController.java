@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 
 @RestController()
 public class LoginController {
@@ -42,7 +43,7 @@ public class LoginController {
         login.setUserId((BigInteger) httpSession.getAttribute(LoginSessionParams.userLogin));
         login.setOpenId((String) httpSession.getAttribute(LoginSessionParams.wechatLogin));
         try {
-            response.setHeader("token",new String(huffmanTree.encrypt(objectMapper.writeValueAsString(login))));
+            response.setHeader("token",new String(huffmanTree.encrypt(objectMapper.writeValueAsString(login)),StandardCharsets.UTF_8));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -63,7 +64,7 @@ public class LoginController {
         login.setUserId((BigInteger) httpSession.getAttribute(LoginSessionParams.userLogin));
         login.setOpenId((String) httpSession.getAttribute(LoginSessionParams.wechatLogin));
         try {
-            response.setHeader("token",new String(huffmanTree.encrypt(objectMapper.writeValueAsString(login))));
+            response.setHeader("token",new String(huffmanTree.encrypt(objectMapper.writeValueAsString(login)), StandardCharsets.UTF_8));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
