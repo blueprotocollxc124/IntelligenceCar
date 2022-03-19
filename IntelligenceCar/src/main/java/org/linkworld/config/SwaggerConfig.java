@@ -21,6 +21,10 @@ import java.util.List;
 public class SwaggerConfig {
     @Bean
     public Docket createRestApi(){
+        ParameterBuilder tokenPar = new ParameterBuilder();
+        List<Parameter> pars = new ArrayList<Parameter>();
+        tokenPar.name("token").description("令牌").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
+        pars.add(tokenPar.build());
         //版本类型是swagger2
         return new Docket(DocumentationType.SWAGGER_2)
                 //通过调用自定义方法apiInfo，获得文档的主要信息

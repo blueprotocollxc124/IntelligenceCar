@@ -5,10 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.shiro.web.filter.authz.AuthorizationFilter;
 import org.linkworld.config.LoginSessionParams;
 import org.linkworld.dao.UserMapper;
+import org.linkworld.persist.emtity.Login;
 import org.linkworld.persist.emtity.User;
 import org.linkworld.persist.vo.ResultBean;
+import org.linkworld.util.HuffmanTree;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,7 @@ import javax.websocket.Session;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +36,10 @@ public class MyAuthFilter extends AuthorizationFilter {
     ObjectMapper objectMapper;
 
     static List<String> list=new ArrayList<>();
+
+    HuffmanTree huffmanTree=new HuffmanTree();
+
+
 
     static {
         list.add("/doc.html");
@@ -57,12 +65,20 @@ public class MyAuthFilter extends AuthorizationFilter {
 
         String url=request.getRequestURL().toString();
 
+        String token=request.getHeader("token");
+
+        HttpSession session= request.getSession();
+        if(token!=null) {
+            Login login = objectMapper.readValue(String.copyValueOf(huffmanTree.decode(token.getBytes(StandardCharsets.UTF_8))), Login.class);
+            session.setAttribute(LoginSessionParams.userLogin, login.getUserId());
+            session.setAttribute(LoginSessionParams.wechatLogin, login.getOpenId());
+        }
         if(list.stream().anyMatch(usl1->url.matches(url))){
             return true;
         }
 
 
-        HttpSession session= request.getSession();
+
 
         BigInteger userId =(BigInteger) session.getAttribute(LoginSessionParams.userLogin);
 
