@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigInteger;
 
@@ -21,7 +22,8 @@ public class LoginController {
     LoginService loginService;
 
     @PostMapping("/login/wechatLogin")
-    public ResultBean WechatLogin(HttpSession httpSession,@RequestParam("code") String code){
+    public ResultBean WechatLogin(HttpServletRequest httpServletRequest, @RequestParam("code") String code){
+        HttpSession httpSession=httpServletRequest.getSession();
         try {
             loginService.wechatLogin(code,httpSession);
         } catch (Exception e) {
@@ -32,7 +34,8 @@ public class LoginController {
     }
 
     @PostMapping("/login/userLogin")
-    public ResultBean UserLogin(HttpSession httpSession, @RequestParam("userId") BigInteger userId,@RequestParam("password") String password){
+    public ResultBean UserLogin(HttpServletRequest httpServletRequest, @RequestParam("userId") BigInteger userId,@RequestParam("password") String password){
+        HttpSession httpSession=httpServletRequest.getSession();
         try {
             loginService.userLogin(userId, password,httpSession);
 
