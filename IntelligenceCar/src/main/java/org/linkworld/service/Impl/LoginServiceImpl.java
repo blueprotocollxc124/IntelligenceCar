@@ -14,6 +14,7 @@ import org.linkworld.util.WechatUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.math.BigInteger;
 @Service
 public class LoginServiceImpl implements LoginService {
@@ -28,14 +29,13 @@ public class LoginServiceImpl implements LoginService {
     UserMapper userMapper;
 
     @Override
-    public int wechatLogin(String code) throws Exception{
+    public void wechatLogin(String code, HttpSession session) throws Exception{
         String openId=wechatUnit.getOpenId(code);
 
         User user=userMapper.getUserByOpen(openId);
 
         Subject subject=SecurityUtils.getSubject();
 
-        Session session=subject.getSession();
 
         BigInteger userId=(BigInteger) session.getAttribute(LoginSessionParams.userLogin);
 
@@ -46,12 +46,12 @@ public class LoginServiceImpl implements LoginService {
             if(user==null){
                 //无微信与用户绑定的情况下
                 userMapper.saveWechatUser(openId,userId);
-                return 2;
+                return ;
             }else {
                 //有绑定情况
                 if(!user.getId().equals(userId)){//绑定情况不一致
                     userMapper.Update(openId,userId);
-                    return 2;
+                    return ;
                 }
             }
         }else {//用户未登录
@@ -59,19 +59,18 @@ public class LoginServiceImpl implements LoginService {
             if(user!=null){
                 subject.login(new MyUserPasswordToken(user.getId(), user.getPassword(), UserRealm.class.getTypeName()));
                 session.setAttribute(LoginSessionParams.userLogin,user.getId());
-                return 2;
+                return ;
             }
 
         }
-        return 1;
+        return ;
 
     }
 
     @Override
-    public int userLogin(BigInteger userId, String password) {
+    public void userLogin(BigInteger userId, String password,HttpSession session) {
 
         Subject subject=SecurityUtils.getSubject();
-        Session session=subject.getSession();
         MyUserPasswordToken token =new MyUserPasswordToken(userId,password, UserRealm.class.getTypeName());
         subject.login(token);
         session.setAttribute(LoginSessionParams.userLogin,userId);
@@ -83,10 +82,9 @@ public class LoginServiceImpl implements LoginService {
                 //已有微信用户登录的情况下，该用户与微信绑定用户不一致
                 userMapper.Update(openId,userId);
             }
-            return 2;
+
          }
 
         //未有微信用户登录
-        return 1;
     }
 }
