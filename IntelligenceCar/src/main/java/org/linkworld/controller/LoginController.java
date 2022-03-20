@@ -10,6 +10,7 @@ import org.linkworld.service.LoginService;
 import org.linkworld.util.HuffmanTree;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 @RestController()
 public class LoginController {
@@ -30,7 +32,7 @@ public class LoginController {
     HuffmanTree huffmanTree=new HuffmanTree();
 
     @PostMapping("/login/wechatLogin")
-    public ResultBean WechatLogin(HttpServletRequest httpServletRequest, HttpServletResponse response, @RequestParam("code") String code){
+    public ResultBean WechatLogin(HttpServletRequest httpServletRequest, @RequestHeader(value = "token",required = false) String token, HttpServletResponse response, @RequestParam("code") String code){
         HttpSession httpSession=httpServletRequest.getSession();
         try {
             loginService.wechatLogin(code,httpSession);
@@ -43,7 +45,7 @@ public class LoginController {
         login.setUserId((BigInteger) httpSession.getAttribute(LoginSessionParams.userLogin));
         login.setOpenId((String) httpSession.getAttribute(LoginSessionParams.wechatLogin));
         try {
-            response.setHeader("token",new String(huffmanTree.encrypt(objectMapper.writeValueAsString(login)),StandardCharsets.UTF_8));
+            response.setHeader("token",byteToString(huffmanTree.encrypt(objectMapper.writeValueAsString(login))));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -51,7 +53,7 @@ public class LoginController {
     }
 
     @PostMapping("/login/userLogin")
-    public ResultBean UserLogin(HttpServletRequest httpServletRequest, HttpServletResponse response, @RequestParam("userId") BigInteger userId, @RequestParam("password") String password){
+    public ResultBean UserLogin(HttpServletRequest httpServletRequest, HttpServletResponse response, @RequestHeader(value = "token",required = false) String token, @RequestParam("userId") BigInteger userId, @RequestParam("password") String password){
         HttpSession httpSession=httpServletRequest.getSession();
         try {
             loginService.userLogin(userId, password,httpSession);
@@ -64,7 +66,9 @@ public class LoginController {
         login.setUserId((BigInteger) httpSession.getAttribute(LoginSessionParams.userLogin));
         login.setOpenId((String) httpSession.getAttribute(LoginSessionParams.wechatLogin));
         try {
-            response.setHeader("token",new String(huffmanTree.encrypt(objectMapper.writeValueAsString(login)), StandardCharsets.UTF_8));
+            response.setHeader("token",byteToString(huffmanTree.encrypt(objectMapper.writeValueAsString(login))));
+
+
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -83,5 +87,23 @@ public class LoginController {
             resultBean.setWechatLogin(1);
         }
         return resultBean;
+    }
+
+    String byteToString(byte[] b){
+        String s=new String(""+b[0]);
+        for(int i=1;i<b.length;i++){
+            s=s+","+(b[i]);
+        }
+
+        return s;
+    }
+
+    byte[] StringToByte(String s){
+        String[] array=s.split(",");
+        byte [] b= new byte[array.length];
+        for(int i=0;i<array.length;i++) {
+            b[i]=(byte) Integer.parseInt(array[i]);
+        }
+        return b;
     }
 }

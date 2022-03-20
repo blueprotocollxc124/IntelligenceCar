@@ -1,7 +1,7 @@
 
 # 端口
 server:
-  port: 8080
+  port: 9090
   servlet:
     context-path: /
 
@@ -11,9 +11,9 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
   datasource:
-    password: 20010307lL.
+    password: blueprotocollxc124
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/car_login?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
-    username: root
+    url: jdbc:mysql://47.107.101.153:3306/intelligencecar?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: intelligencecar
     type: com.alibaba.druid.pool.DruidDataSource
 

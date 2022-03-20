@@ -10,7 +10,7 @@ public class HuffmanTree {
 
     private static char c2='1';
 
-    private static List<Character> code=new ArrayList<>(100000000);
+    private static List<Character> code=new ArrayList<>();
 
     private static int headLength=40;
 

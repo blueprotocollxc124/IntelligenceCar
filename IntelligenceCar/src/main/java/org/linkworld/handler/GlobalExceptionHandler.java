@@ -52,6 +52,12 @@ public class GlobalExceptionHandler {
         return ResultBean.bad().setMessage(errors);
     }
 
+    @ExceptionHandler({ RuntimeException.class })
+    public Object RException(HttpServletRequest request, HttpServletResponse response) {
+        String errors = "用户操作错误";
+        return ResultBean.bad().setMessage(errors);
+    }
+
 
 
 }

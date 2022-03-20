@@ -11,6 +11,7 @@ import org.linkworld.persist.vo.ResultBean;
 import org.linkworld.util.HuffmanTree;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.propertyeditors.ByteArrayPropertyEditor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -69,7 +70,13 @@ public class MyAuthFilter extends AuthorizationFilter {
 
         HttpSession session= request.getSession();
         if(token!=null) {
-            Login login = objectMapper.readValue(String.copyValueOf(huffmanTree.decode(token.getBytes(StandardCharsets.UTF_8))), Login.class);
+            Login login;
+            try {
+                login = objectMapper.readValue(String.copyValueOf(huffmanTree.decode(StringToByte(token))), Login.class);
+            }catch (Exception e){
+                throw new RuntimeException("token信息错误");
+            }
+
             session.setAttribute(LoginSessionParams.userLogin, login.getUserId());
             session.setAttribute(LoginSessionParams.wechatLogin, login.getOpenId());
         }
@@ -121,6 +128,15 @@ public class MyAuthFilter extends AuthorizationFilter {
         out.flush();
         out.close();
         return false;
+    }
+
+    byte[] StringToByte(String s){
+        String[] array=s.split(",");
+        byte [] b= new byte[array.length];
+        for(int i=0;i<array.length;i++) {
+            b[i]=(byte) Integer.parseInt(array[i]);
+        }
+        return b;
     }
 
 }
