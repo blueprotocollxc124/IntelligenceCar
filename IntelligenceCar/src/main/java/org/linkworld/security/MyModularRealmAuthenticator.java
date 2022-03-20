@@ -21,8 +21,11 @@ public class MyModularRealmAuthenticator extends ModularRealmAuthenticator {
        Collection<Realm> realms=getRealms();
 
        for(Realm realm: realms){
+           System.out.println(realm.getClass().getName());
+           System.out.println(type);
             if(realm.getClass().getName().equals(type)){
-               return doSingleRealmAuthentication(realm,userPasswordToken);
+
+               return  doSingleRealmAuthentication(realm,userPasswordToken);
             }
         }
         throw new AuthenticationException();

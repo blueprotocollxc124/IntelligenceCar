@@ -8,6 +8,7 @@ import org.linkworld.config.LoginSessionParams;
 import org.linkworld.dao.UserMapper;
 import org.linkworld.persist.emtity.User;
 import org.linkworld.security.MyUserPasswordToken;
+import org.linkworld.security.MyWechatRealm;
 import org.linkworld.security.UserRealm;
 import org.linkworld.service.LoginService;
 import org.linkworld.util.WechatUnit;
@@ -59,13 +60,12 @@ public class LoginServiceImpl implements LoginService {
         }else {//用户未登录
             //用户未登录，微信在数据库中有绑定的用户
             if(user!=null){
-                subject.login(new MyUserPasswordToken(user.getId(), user.getPassword(), UserRealm.class.getTypeName()));
+                subject.login(new MyUserPasswordToken(user.getId(), user.getPassword(), MyWechatRealm.class.getTypeName()));
                 session.setAttribute(LoginSessionParams.userLogin,user.getId());
-                return ;
             }
 
         }
-        return ;
+
 
     }
 

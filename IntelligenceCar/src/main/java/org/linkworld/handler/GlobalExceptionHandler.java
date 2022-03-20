@@ -41,6 +41,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ResultBean exception(Exception e) {
         // 输出所有的错误信息
+        e.printStackTrace();
         String errors = "后台发生错误，正在反馈程序员";
         return ResultBean.bad().setMessage(errors);
     }
