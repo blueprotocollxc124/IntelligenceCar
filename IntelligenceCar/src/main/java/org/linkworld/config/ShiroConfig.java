@@ -95,7 +95,6 @@ public class ShiroConfig {
         map.put("/doc.html","anon");
         map.put("/login/**", "anon");
         map.put("/picture/**","anon");
-        map.put("/pattern/**","anon");
         map.put("/swagger-ui.html#/","anon");
         map.put("/css/**","anon");
         map.put("/fonts/**","anon");
