@@ -9,6 +9,7 @@ package org.linkworld.service.Impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.linkworld.dao.UserPatternMapper;
 import org.linkworld.persist.emtity.UserPattern;
+import org.linkworld.service.UserPatternService;
 import org.springframework.stereotype.Service;
 
 @Service

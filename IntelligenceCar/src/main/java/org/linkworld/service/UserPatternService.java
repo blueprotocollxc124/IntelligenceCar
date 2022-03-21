@@ -1,4 +1,4 @@
-package org.linkworld.service.Impl;
+package org.linkworld.service;
 
 /*
  *@Author  LXC BlueProtocol

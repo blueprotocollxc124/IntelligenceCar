@@ -7,16 +7,18 @@ package org.linkworld.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.apache.ibatis.annotations.Param;
 import org.linkworld.check.sequence.PatternDTOSequence;
 import org.linkworld.persist.dto.PatternDTO;
 import org.linkworld.persist.emtity.Pattern;
 import org.linkworld.persist.emtity.UserPattern;
 import org.linkworld.persist.vo.ResultBean;
-import org.linkworld.service.Impl.UserPatternService;
+import org.linkworld.service.UserPatternService;
 import org.linkworld.service.PatternService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.math.BigInteger;
@@ -31,37 +33,36 @@ public class UserOperationController extends BaseController{
     @Autowired
     private PatternService patternService;
 
-    @Autowired
-    private UserPatternService userPatternService;
-
 
     @PostMapping("/addPattern")
     @ResponseBody
     @Transactional
     public ResultBean createOnePattern(@RequestBody @Validated({PatternDTOSequence.class})PatternDTO dto) {
-        String userIdStr = getUserId();
-        Pattern pattern = new Pattern(dto);
-        patternService.save(pattern);
-        UserPattern userPattern = new UserPattern(new BigInteger(userIdStr), dto.getPatternName());
-        userPatternService.save(userPattern);
-        return ResultBean.ok();
+        return patternService.createOnePattern(dto,getUserId());
     }
 
     @GetMapping("/getAllPattern")
     @ResponseBody
     public ResultBean getAllPattern() {
-        String userId = getUserId();
-        ArrayList<Pattern> patternList = new ArrayList<>();
-        LambdaQueryWrapper<UserPattern> wrapper = new QueryWrapper<UserPattern>().lambda().eq(UserPattern::getUserId, userId);
-        List<UserPattern> userPatternList = userPatternService.list(wrapper);
-        userPatternList.forEach(userPattern -> {
-            LambdaQueryWrapper<Pattern> patternWrapper = new QueryWrapper<Pattern>().lambda().eq(Pattern::getPatternName, userPattern.getPatternName());
-            Pattern pattern = patternService.getOne(patternWrapper);
-            Pattern realPattern = Optional.ofNullable(pattern).orElseThrow(() -> {
-                return new RuntimeException("没有这样的pattern");
-            });
-            patternList.add(realPattern);
-        });
-        return ResultBean.ok().setData(patternList);
+        return patternService.getAllPattern(getUserId());
     }
+
+
+
+    @GetMapping("/getOnePattern")
+    @ResponseBody
+    public ResultBean getOnePattern(@Param("patternName")String patternName) {
+        return patternService.getOnePattern(patternName);
+    }
+
+
+    @DeleteMapping("/deleteOnePattern")
+    @ResponseBody
+    public ResultBean deleteOnePattern(@Param("patternName")String patternName) {
+       return patternService.deleteOnePattern(getUserId(),patternName);
+    }
+
+
+
+
 }

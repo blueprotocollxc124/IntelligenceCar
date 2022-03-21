@@ -74,6 +74,7 @@ public class MyAuthFilter extends AuthorizationFilter {
             try {
                 login = objectMapper.readValue(String.copyValueOf(huffmanTree.decode(StringToByte(token))), Login.class);
             }catch (Exception e){
+                e.printStackTrace();
                 throw new RuntimeException("token信息错误");
             }
 
