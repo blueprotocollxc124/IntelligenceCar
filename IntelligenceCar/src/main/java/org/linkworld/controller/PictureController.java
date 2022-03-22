@@ -32,10 +32,10 @@ public class PictureController extends BaseController{
 
  @PostMapping("/savePicture")
  @ResponseBody
- public ResultBean savePictureToServer(HttpServletRequest httpServletRequest,@RequestParam("file") MultipartFile file) {
+ public ResultBean savePictureToServer(@RequestHeader("token") String token,HttpServletRequest httpServletRequest,@RequestParam("file") MultipartFile file) {
   HttpSession session=httpServletRequest.getSession();
   Boolean isTrue = savePicture(file);
-  if(isTrue==true) {
+  if(isTrue) {
    return ResultBean.ok();
   }
   return loginNum(session,ResultBean.bad());
@@ -44,7 +44,7 @@ public class PictureController extends BaseController{
 
  @GetMapping("/getAllPictures")
  @ResponseBody
- public ResultBean getAllPicture(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse) {
+ public ResultBean getAllPicture(HttpServletRequest httpServletRequest,@RequestHeader("token") String token) {
   HttpSession session=httpServletRequest.getSession();
   File pictureFiles = new File(FileProperties.LINUX_OUT_FILE_PATH);
   File[] files = pictureFiles.listFiles();

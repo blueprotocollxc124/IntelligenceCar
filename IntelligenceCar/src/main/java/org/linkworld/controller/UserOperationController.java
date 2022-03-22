@@ -13,10 +13,10 @@ import org.linkworld.persist.dto.PatternDTO;
 import org.linkworld.persist.emtity.Pattern;
 import org.linkworld.persist.emtity.UserPattern;
 import org.linkworld.persist.vo.ResultBean;
-import org.linkworld.service.Impl.UserPatternService;
 import org.linkworld.service.PatternService;
+import org.linkworld.service.UserPatternService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -43,7 +43,7 @@ public class UserOperationController extends BaseController{
     @PostMapping("/addPattern")
     @ResponseBody
     @Transactional
-    public ResultBean createOnePattern(HttpServletRequest httpRequest, @RequestBody @Validated({PatternDTOSequence.class})PatternDTO dto) {
+    public ResultBean createOnePattern(HttpServletRequest httpRequest, @RequestBody @Validated({PatternDTOSequence.class})PatternDTO dto, @RequestHeader("token") String token) {
         HttpSession session=request.getSession();
         String userIdStr = getUserId();
         Pattern pattern = new Pattern(dto);
@@ -55,7 +55,7 @@ public class UserOperationController extends BaseController{
 
     @GetMapping("/getAllPattern")
     @ResponseBody
-    public ResultBean getAllPattern(HttpServletRequest request) {
+    public ResultBean getAllPattern(HttpServletRequest request,@RequestHeader("token") String token) {
         HttpSession session=request.getSession();
         String userId = getUserId();
         ArrayList<Pattern> patternList = new ArrayList<>();

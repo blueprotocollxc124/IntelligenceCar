@@ -25,7 +25,8 @@ public class BaseController {
  protected String getUserId() {
   Object userIdObj = request.getSession().getAttribute("userId");
   Object userId = Optional.ofNullable(userIdObj).orElseThrow(()->{
-   return new RuntimeException("userId为null");
+
+   return   new RuntimeException("userId为null");
   });
   return userId.toString();
  }
