@@ -43,7 +43,7 @@ public class UserOperationController extends BaseController{
     @PostMapping("/addPattern")
     @ResponseBody
     @Transactional
-    public ResultBean createOnePattern(HttpServletRequest httpRequest, @RequestBody @Validated({PatternDTOSequence.class})PatternDTO dto, @RequestHeader("token") String token) {
+    public ResultBean createOnePattern( @RequestBody @Validated({PatternDTOSequence.class})PatternDTO dto, @RequestHeader("token") String token) {
         HttpSession session=request.getSession();
         String userIdStr = getUserId();
         Pattern pattern = new Pattern(dto);
@@ -55,7 +55,7 @@ public class UserOperationController extends BaseController{
 
     @GetMapping("/getAllPattern")
     @ResponseBody
-    public ResultBean getAllPattern(HttpServletRequest request,@RequestHeader("token") String token) {
+    public ResultBean getAllPattern(@RequestHeader("token") String token) {
         HttpSession session=request.getSession();
         String userId = getUserId();
         ArrayList<Pattern> patternList = new ArrayList<>();

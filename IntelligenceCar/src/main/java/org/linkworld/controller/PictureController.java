@@ -20,10 +20,12 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.transform.Result;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Optional;
 
 @Controller
 @Slf4j
@@ -44,13 +46,21 @@ public class PictureController extends BaseController{
 
  @GetMapping("/getAllPictures")
  @ResponseBody
+
  public ResultBean getAllPicture(HttpServletRequest httpServletRequest,@RequestHeader("token") String token) {
   HttpSession session=httpServletRequest.getSession();
-  File pictureFiles = new File(FileProperties.LINUX_OUT_FILE_PATH);
-  File[] files = pictureFiles.listFiles();
+  File pictureFiles = new File(FileProperties.OUT_FILE_PATH);
   ArrayList<File> fileList = new ArrayList<>();
+  if(pictureFiles==null) {
+   return ResultBean.ok().setMessage("您还没有拍任何照片").setData(fileList);
+  }
+  File[] files = pictureFiles.listFiles();
   for (File file : files) {
    fileList.add(file);
+  }
+  if(fileList.size()==0) {
+   return loginNum(session,ResultBean.ok().setData(fileList).setMessage("您还没有怕任何照片"));
+
   }
   return loginNum(session,ResultBean.ok().setData(fileList));
  }
