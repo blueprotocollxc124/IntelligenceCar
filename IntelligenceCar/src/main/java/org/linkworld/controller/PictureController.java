@@ -38,7 +38,7 @@ public class PictureController extends BaseController{
   HttpSession session=httpServletRequest.getSession();
   Boolean isTrue = savePicture(file);
   if(isTrue) {
-   return ResultBean.ok();
+   return loginNum(session,ResultBean.ok());
   }
   return loginNum(session,ResultBean.bad());
  }
