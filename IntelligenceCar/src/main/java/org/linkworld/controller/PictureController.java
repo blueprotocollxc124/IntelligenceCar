@@ -7,6 +7,7 @@ package org.linkworld.controller;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.linkworld.config.LoginSessionParams;
 import org.linkworld.persist.vo.ResultBean;
 import org.linkworld.properties.FileProperties;
 import org.springframework.boot.ansi.AnsiColor;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,25 +32,27 @@ public class PictureController extends BaseController{
 
  @PostMapping("/savePicture")
  @ResponseBody
- public ResultBean savePictureToServer(@RequestParam("file") MultipartFile file) {
+ public ResultBean savePictureToServer(HttpServletRequest httpServletRequest,@RequestParam("file") MultipartFile file) {
+  HttpSession session=httpServletRequest.getSession();
   Boolean isTrue = savePicture(file);
   if(isTrue==true) {
    return ResultBean.ok();
   }
-  return ResultBean.bad();
+  return loginNum(session,ResultBean.bad());
  }
 
 
  @GetMapping("/getAllPictures")
  @ResponseBody
- public ResultBean getAllPicture() {
+ public ResultBean getAllPicture(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse) {
+  HttpSession session=httpServletRequest.getSession();
   File pictureFiles = new File(FileProperties.LINUX_OUT_FILE_PATH);
   File[] files = pictureFiles.listFiles();
   ArrayList<File> fileList = new ArrayList<>();
   for (File file : files) {
    fileList.add(file);
   }
-  return ResultBean.ok().setData(fileList);
+  return loginNum(session,ResultBean.ok().setData(fileList));
  }
 
  private Boolean savePicture(MultipartFile file)  {
@@ -91,5 +97,16 @@ public class PictureController extends BaseController{
   return true;
  }
 
+ public ResultBean loginNum(HttpSession session, ResultBean resultBean){
 
+  if(session.getAttribute(LoginSessionParams.userLogin)!=null){
+   resultBean.setUserLogin(1);
+
+  }
+
+  if(session.getAttribute(LoginSessionParams.wechatLogin)!=null){
+   resultBean.setWechatLogin(1);
+  }
+  return resultBean;
+ }
 }

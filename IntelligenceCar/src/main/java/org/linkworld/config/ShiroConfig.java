@@ -92,19 +92,20 @@ public class ShiroConfig {
         Map<String, String> map = new HashMap<>();
         map.put("/**", "filter");
         // 访问 /login/** 不通过JWTFilter
-        map.put("/doc.html","anon");
-        map.put("/login/**", "anon");
-        map.put("/picture/**","anon");
-        map.put("/swagger-ui.html#/","anon");
-        map.put("/css/**","anon");
-        map.put("/fonts/**","anon");
-        map.put("/img/**","anon");
-        map.put("/js/**","anon");
-        map.put("/v2/api-docs","anon");
-        map.put("/swagger-ui.html", "anon");
-        map.put("/webjars/**", "anon");
-        map.put("/v2/**", "anon");
-        map.put("/swagger-resources/**", "anon");
+//        map.put("/doc.html","anon");
+//        map.put("/login/**", "anon");
+//        map.put("/picture/**","anon");
+//        map.put("/pattern/**","anon");
+//        map.put("/swagger-ui.html#/","anon");
+//        map.put("/css/**","anon");
+//        map.put("/fonts/**","anon");
+//        map.put("/img/**","anon");
+//        map.put("/js/**","anon");
+//        map.put("/v2/api-docs","anon");
+//        map.put("/swagger-ui.html", "anon");
+//        map.put("/webjars/**", "anon");
+//        map.put("/v2/**", "anon");
+//        map.put("/swagger-resources/**", "anon");
 
 
        shiroFilterFactoryBean.setFilterChainDefinitionMap(map);

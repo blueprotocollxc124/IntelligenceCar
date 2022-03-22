@@ -29,7 +29,7 @@ public class LoginController {
     @Autowired
     ObjectMapper objectMapper;
 
-    HuffmanTree huffmanTree=new HuffmanTree();
+
 
     @PostMapping("/login/wechatLogin")
     public ResultBean WechatLogin(HttpServletRequest httpServletRequest, @RequestHeader(value = "token",required = false) String token, HttpServletResponse response, @RequestParam("code") String code){
@@ -41,10 +41,10 @@ public class LoginController {
             return loginNum(httpSession,ResultBean.bad());
         }
 
-        Login login=new Login();
-        login.setUserId((BigInteger) httpSession.getAttribute(LoginSessionParams.userLogin));
-        login.setOpenId((String) httpSession.getAttribute(LoginSessionParams.wechatLogin));
+        Login login=new Login((BigInteger) httpSession.getAttribute(LoginSessionParams.userLogin),(String) httpSession.getAttribute(LoginSessionParams.wechatLogin));
+
         try {
+            HuffmanTree huffmanTree=new HuffmanTree();
             response.setHeader("token",byteToString(huffmanTree.encrypt(objectMapper.writeValueAsString(login))));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -62,10 +62,9 @@ public class LoginController {
             e.printStackTrace();
             return loginNum(httpSession,ResultBean.bad());
         }
-        Login login=new Login();
-        login.setUserId((BigInteger) httpSession.getAttribute(LoginSessionParams.userLogin));
-        login.setOpenId((String) httpSession.getAttribute(LoginSessionParams.wechatLogin));
+        Login login=new Login((BigInteger) httpSession.getAttribute(LoginSessionParams.userLogin),(String) httpSession.getAttribute(LoginSessionParams.wechatLogin));
         try {
+            HuffmanTree huffmanTree=new HuffmanTree();
             response.setHeader("token",byteToString(huffmanTree.encrypt(objectMapper.writeValueAsString(login))));
 
 
@@ -98,12 +97,4 @@ public class LoginController {
         return s;
     }
 
-    byte[] StringToByte(String s){
-        String[] array=s.split(",");
-        byte [] b= new byte[array.length];
-        for(int i=0;i<array.length;i++) {
-            b[i]=(byte) Integer.parseInt(array[i]);
-        }
-        return b;
-    }
 }

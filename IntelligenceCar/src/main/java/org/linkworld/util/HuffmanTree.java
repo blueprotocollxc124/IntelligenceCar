@@ -4,13 +4,13 @@ import java.util.*;
 
 public class HuffmanTree {
 
-    private static char[] cha;
+    private  char[] cha;
 
     private static char c1='0';
 
     private static char c2='1';
 
-    private static List<Character> code=new ArrayList<>();
+    private  List<Character> code=new ArrayList<>();
 
     private static int headLength=40;
 

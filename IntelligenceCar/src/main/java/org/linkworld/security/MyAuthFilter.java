@@ -38,7 +38,7 @@ public class MyAuthFilter extends AuthorizationFilter {
 
     static List<String> list=new ArrayList<>();
 
-    HuffmanTree huffmanTree=new HuffmanTree();
+
 
 
 
@@ -69,8 +69,9 @@ public class MyAuthFilter extends AuthorizationFilter {
         String token=request.getHeader("token");
 
         HttpSession session= request.getSession();
-        if(token!=null) {
+        if(token!=null&&(!"".equals(token))) {
             Login login;
+            HuffmanTree huffmanTree=new HuffmanTree();
             try {
                 login = objectMapper.readValue(String.copyValueOf(huffmanTree.decode(StringToByte(token))), Login.class);
             }catch (Exception e){

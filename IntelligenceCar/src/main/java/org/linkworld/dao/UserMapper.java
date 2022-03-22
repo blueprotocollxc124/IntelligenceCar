@@ -23,14 +23,14 @@ public interface UserMapper extends BaseMapper<User> {
             "from `user`\n" +
             "inner join wechat_user as wu\n" +
             "on wu.`id`= `user`.`id`  " +
-            "where wu.`id`=#{userId}")
+            "where wu.`open_id`=#{openId}")
     @ResultType(User.class)
-    User getWechatUserByUserId(@Param("openId") String openId);
+    User getWechatUserByOpenId(@Param("openId") String openId);
 
-    @Insert("insert into `wechat_user` (`openId`,`id`) value (#{openId},#{userId})")
+    @Insert("insert into `wechat_user` (`open_id`,`id`) value (#{openId},#{userId})")
     void saveWechatUser(@Param("openId") String openId, @Param("userId") BigInteger userId);
 
-    @Update("update `wechat_user set id=${userId} where  and `open_id`=#{openId}")
+    @Update("update `wechat_user` set `id`=#{userId}  where  `open_id`=#{openId}")
     void Update(@Param("openId") String openId, @Param("userId") BigInteger userId);
 
 }

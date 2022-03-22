@@ -2,7 +2,6 @@ package org.linkworld.service.Impl;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.linkworld.config.LoginSessionParams;
 import org.linkworld.dao.UserMapper;
@@ -79,11 +78,11 @@ public class LoginServiceImpl implements LoginService {
         String openId=(String) session.getAttribute(LoginSessionParams.wechatLogin);
 
         if(openId!=null){
-            User user=userMapper.getWechatUserByUserId(openId);
+            User user=userMapper.getWechatUserByOpenId(openId);
             if(user==null) {
                 //已有微信用户登录的情况下，该用户与微信绑定用户不一致
                 userMapper.saveWechatUser(openId,userId);
-            }else if(user!=null&&!user.getId().equals(userId)){
+            }else if(!user.getId().equals(userId)){
                 userMapper.Update(openId,userId);
             }
 
