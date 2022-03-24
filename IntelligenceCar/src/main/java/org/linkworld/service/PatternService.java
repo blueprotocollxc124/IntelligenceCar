@@ -30,4 +30,7 @@ public interface PatternService extends IService<Pattern> {
     ResultBean deleteOnePattern(String userId, String patternName);
 
 
+    ResultBean updateOnePatten(Pattern newPattern, String patternName);
+
+
 }

@@ -30,6 +30,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public void wechatLogin(String code, HttpSession session) throws Exception{
+
         String openId=wechatUnit.getOpenId(code);
 
         User user=userMapper.getUserByOpen(openId);
@@ -42,7 +43,8 @@ public class LoginServiceImpl implements LoginService {
         session.setAttribute(LoginSessionParams.wechatLogin,openId);
 
 
-        if(userId!=null){//判断以有用户登录
+        if(userId!=null){
+            //判断以有用户登录
             if(user==null){
                 //无微信与用户绑定的情况下
                 userMapper.saveWechatUser(openId,userId);

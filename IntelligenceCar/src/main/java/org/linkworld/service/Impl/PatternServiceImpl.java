@@ -104,4 +104,17 @@ public class PatternServiceImpl extends ServiceImpl<PatternMapper, Pattern> impl
         }
         return ResultBean.ok();
     }
+
+    @Override
+    public ResultBean updateOnePatten(Pattern newPattern, String patternName) {
+        if(!StringUtils.hasText(patternName)) {
+            return ResultBean.bad().setMessage("模式名不能为空");
+        }
+        LambdaQueryWrapper<Pattern> patternWrapper = new QueryWrapper<Pattern>().lambda().eq(Pattern::getPatternName, patternName);
+        Pattern pattern = Optional.ofNullable(patternMapper.selectOne(patternWrapper)).orElseThrow(() -> {
+            return new RuntimeException("没有找到对应的模式");
+        });
+        patternMapper.update(newPattern,patternWrapper);
+        return ResultBean.ok();
+    }
 }

@@ -43,21 +43,21 @@ public class Pattern {
 
     private String collectTimes;
 
-    private Integer light;
+    private int light;
 
-    private Integer photo;
+    private int photo;
 
-    private Integer lightHeightDetect;
+    private int lightHeightDetect;
 
-    private Integer wetDegreeDetect;
+    private int wetDegreeDetect;
 
-    private Integer smokeDegreeDetect;
+    private int smokeDegreeDetect;
 
-    private Integer barrierDetect;
+    private int barrierDetect;
 
-    private Integer cooperation;
+    private int cooperation;
 
-    private Integer lowTurnBack;
+    private int lowTurnBack;
 
     private String tag;
 

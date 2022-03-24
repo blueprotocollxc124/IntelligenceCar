@@ -7,6 +7,7 @@ package org.linkworld.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.apache.ibatis.annotations.Param;
 import org.linkworld.check.sequence.PatternDTOSequence;
 import org.linkworld.config.LoginSessionParams;
 import org.linkworld.persist.dto.PatternDTO;
@@ -43,7 +44,7 @@ public class UserOperationController extends BaseController{
     @PostMapping("/addPattern")
     @ResponseBody
     @Transactional
-    public ResultBean createOnePattern( @RequestBody @Validated({PatternDTOSequence.class})PatternDTO dto, @RequestHeader("token") String token) {
+    public ResultBean createOnePattern(@RequestBody @Validated({PatternDTOSequence.class})PatternDTO dto, @RequestHeader("token") String token) {
         HttpSession session=request.getSession();
         String userIdStr = getUserId();
         Pattern pattern = new Pattern(dto);
@@ -71,6 +72,31 @@ public class UserOperationController extends BaseController{
         });
         return loginNum(session,ResultBean.ok().setData(patternList));
     }
+
+    @GetMapping("/getOnePattern")
+    @ResponseBody
+    public ResultBean getOneOperation(@Param("patternName")String patternName) {
+        return  patternService.getOnePattern(patternName);
+    }
+
+
+    @DeleteMapping("/deleteOnePattern")
+    @ResponseBody
+    public ResultBean deletePattern(@Param("patternName")String patternName) {
+        String userId = getUserId();
+        return patternService.deleteOnePattern(userId, patternName);
+    }
+
+    @PostMapping("/updateOnePattern")
+    @ResponseBody
+    public ResultBean updatePattern(@RequestBody @Validated({PatternDTOSequence.class})PatternDTO dto) {
+        Pattern pattern = new Pattern(dto);
+        if(pattern==null) {
+            return ResultBean.bad().setMessage("模式修改失败");
+        }
+        return patternService.updateOnePatten(pattern,pattern.getPatternName());
+    }
+
 
 
     public ResultBean loginNum(HttpSession session, ResultBean resultBean){
