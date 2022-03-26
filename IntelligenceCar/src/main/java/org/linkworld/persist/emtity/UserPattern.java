@@ -20,5 +20,5 @@ public class UserPattern {
 
     private BigInteger userId;
 
-    private String patternName;
+    private BigInteger patternId;
 }

@@ -62,6 +62,7 @@ public class Pattern {
     private String tag;
 
     public Pattern (PatternDTO dto) {
+        this.patternId = dto.getPatternId();
         this.patternName = dto.getPatternName();
         this.datetimeChoice = dto.getDatetimeChoice();
         this.beginTime = dto.getBeginTime();

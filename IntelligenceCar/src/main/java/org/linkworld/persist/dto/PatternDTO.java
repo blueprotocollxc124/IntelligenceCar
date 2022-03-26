@@ -15,6 +15,7 @@ import javax.swing.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.math.BigInteger;
 import java.util.Date;
 
 @Data
@@ -22,6 +23,9 @@ import java.util.Date;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown =  true )
 public class PatternDTO {
+
+    @NotNull(message = "模式的id不能为null")
+    private BigInteger patternId;
 
 
     @NotBlank(message = "模式的名称不能为空")

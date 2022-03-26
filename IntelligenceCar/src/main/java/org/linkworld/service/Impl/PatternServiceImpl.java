@@ -51,7 +51,7 @@ public class PatternServiceImpl extends ServiceImpl<PatternMapper, Pattern> impl
     public ResultBean createOnePattern(PatternDTO dto, String userIdStr) {
         Pattern pattern = new Pattern(dto);
         patternMapper.insert(pattern);
-        UserPattern userPattern = new UserPattern(new BigInteger(userIdStr), dto.getPatternName());
+        UserPattern userPattern = new UserPattern(new BigInteger(userIdStr), pattern.getPatternId());
         userPatternMapper.insert(userPattern);
         return ResultBean.ok();
     }
@@ -62,7 +62,7 @@ public class PatternServiceImpl extends ServiceImpl<PatternMapper, Pattern> impl
         LambdaQueryWrapper<UserPattern> wrapper = new QueryWrapper<UserPattern>().lambda().eq(UserPattern::getUserId, userId);
         List<UserPattern> userPatternList = userPatternMapper.selectList(wrapper);
         userPatternList.forEach(userPattern -> {
-            LambdaQueryWrapper<Pattern> patternWrapper = new QueryWrapper<Pattern>().lambda().eq(Pattern::getPatternName, userPattern.getPatternName());
+            LambdaQueryWrapper<Pattern> patternWrapper = new QueryWrapper<Pattern>().lambda().eq(Pattern::getPatternId, userPattern.getPatternId());
             Pattern pattern = patternMapper.selectOne(patternWrapper);
             Pattern realPattern = Optional.ofNullable(pattern).orElseThrow(() -> {
                 return new RuntimeException("没有这样的pattern");
@@ -73,11 +73,11 @@ public class PatternServiceImpl extends ServiceImpl<PatternMapper, Pattern> impl
     }
 
     @Override
-    public ResultBean getOnePattern(String patternName) {
-        if(!StringUtils.hasText(patternName)) {
-            return ResultBean.bad().setMessage("模式名不能为空");
+    public ResultBean getOnePattern(BigInteger patternId) {
+        if(patternId==null) {
+            return ResultBean.bad().setMessage("patternId不为null");
         }
-        LambdaQueryWrapper<Pattern> patternWrapper = new QueryWrapper<Pattern>().lambda().eq(Pattern::getPatternName, patternName);
+        LambdaQueryWrapper<Pattern> patternWrapper = new QueryWrapper<Pattern>().lambda().eq(Pattern::getPatternId, patternId);
         Pattern pattern = Optional.ofNullable(patternMapper.selectOne(patternWrapper)).orElseThrow(() -> {
             return new RuntimeException("没有这样的pattern");
         });
@@ -85,14 +85,14 @@ public class PatternServiceImpl extends ServiceImpl<PatternMapper, Pattern> impl
     }
 
     @Override
-    public ResultBean deleteOnePattern(String userId,String patternName) {
-        if(!StringUtils.hasText(patternName)) {
-            return ResultBean.bad().setMessage("模式名不能为空");
+    public ResultBean deleteOnePattern(String userId,BigInteger patternId) {
+        if(patternId==null) {
+            return ResultBean.bad().setMessage("patternId不为null");
         }
         LambdaQueryWrapper<UserPattern> userPatternWrapper = new QueryWrapper<UserPattern>().lambda()
                 .eq(UserPattern::getUserId, userId)
-                .eq(UserPattern::getPatternName, patternName);
-        LambdaQueryWrapper<Pattern> patternWrapper = new QueryWrapper<Pattern>().lambda().eq(Pattern::getPatternName, patternName);
+                .eq(UserPattern::getPatternId, patternId);
+        LambdaQueryWrapper<Pattern> patternWrapper = new QueryWrapper<Pattern>().lambda().eq(Pattern::getPatternId, patternId);
         TransactionStatus status = manager.getTransaction(transactionDefinition);
         try {
             userPatternMapper.delete(userPatternWrapper );
@@ -106,11 +106,11 @@ public class PatternServiceImpl extends ServiceImpl<PatternMapper, Pattern> impl
     }
 
     @Override
-    public ResultBean updateOnePatten(Pattern newPattern, String patternName) {
-        if(!StringUtils.hasText(patternName)) {
-            return ResultBean.bad().setMessage("模式名不能为空");
+    public ResultBean updateOnePatten(Pattern newPattern, BigInteger patternId) {
+        if(patternId==null) {
+            return ResultBean.bad().setMessage("patternId不为null");
         }
-        LambdaQueryWrapper<Pattern> patternWrapper = new QueryWrapper<Pattern>().lambda().eq(Pattern::getPatternName, patternName);
+        LambdaQueryWrapper<Pattern> patternWrapper = new QueryWrapper<Pattern>().lambda().eq(Pattern::getPatternId, patternId);
         Pattern pattern = Optional.ofNullable(patternMapper.selectOne(patternWrapper)).orElseThrow(() -> {
             return new RuntimeException("没有找到对应的模式");
         });

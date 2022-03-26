@@ -49,7 +49,7 @@ public class PictureController extends BaseController{
 
  public ResultBean getAllPicture(HttpServletRequest httpServletRequest,@RequestHeader("token") String token) {
   HttpSession session=httpServletRequest.getSession();
-  File pictureFiles = new File(FileProperties.OUT_FILE_PATH);
+  File pictureFiles = new File(FileProperties.LINUX_OUT_FILE_PATH);
   ArrayList<File> fileList = new ArrayList<>();
   if(pictureFiles==null) {
    return ResultBean.ok().setMessage("您还没有拍任何照片").setData(fileList);

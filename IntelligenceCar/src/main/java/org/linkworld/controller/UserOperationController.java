@@ -49,7 +49,7 @@ public class UserOperationController extends BaseController{
         String userIdStr = getUserId();
         Pattern pattern = new Pattern(dto);
         patternService.save(pattern);
-        UserPattern userPattern = new UserPattern(new BigInteger(userIdStr), dto.getPatternName());
+        UserPattern userPattern = new UserPattern(new BigInteger(userIdStr), pattern.getPatternId());
         userPatternService.save(userPattern);
         return loginNum(session,ResultBean.ok());
     }
@@ -63,28 +63,28 @@ public class UserOperationController extends BaseController{
         LambdaQueryWrapper<UserPattern> wrapper = new QueryWrapper<UserPattern>().lambda().eq(UserPattern::getUserId, userId);
         List<UserPattern> userPatternList = userPatternService.list(wrapper);
         userPatternList.forEach(userPattern -> {
-            LambdaQueryWrapper<Pattern> patternWrapper = new QueryWrapper<Pattern>().lambda().eq(Pattern::getPatternName, userPattern.getPatternName());
+            LambdaQueryWrapper<Pattern> patternWrapper = new QueryWrapper<Pattern>().lambda().eq(Pattern::getPatternId, userPattern.getPatternId());
             Pattern pattern = patternService.getOne(patternWrapper);
             Pattern realPattern = Optional.ofNullable(pattern).orElseThrow(() -> {
                 return new RuntimeException("没有这样的pattern");
             });
             patternList.add(realPattern);
         });
-        return loginNum(session,ResultBean.ok().setData(patternList));
+                return loginNum(session,ResultBean.ok().setData(patternList));
     }
 
     @GetMapping("/getOnePattern")
     @ResponseBody
-    public ResultBean getOneOperation(@Param("patternName")String patternName) {
-        return  patternService.getOnePattern(patternName);
+    public ResultBean getOneOperation(@Param("patternId")BigInteger patternId) {
+        return  patternService.getOnePattern(patternId);
     }
 
 
     @DeleteMapping("/deleteOnePattern")
     @ResponseBody
-    public ResultBean deletePattern(@Param("patternName")String patternName) {
+    public ResultBean deletePattern(@Param("patternId")BigInteger patternId) {
         String userId = getUserId();
-        return patternService.deleteOnePattern(userId, patternName);
+        return patternService.deleteOnePattern(userId, patternId);
     }
 
     @PostMapping("/updateOnePattern")
@@ -94,7 +94,7 @@ public class UserOperationController extends BaseController{
         if(pattern==null) {
             return ResultBean.bad().setMessage("模式修改失败");
         }
-        return patternService.updateOnePatten(pattern,pattern.getPatternName());
+        return patternService.updateOnePatten(pattern,pattern.getPatternId());
     }
 
 
